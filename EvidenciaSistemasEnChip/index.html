@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estado del Acceso</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .home {
+            background-color: #e8fdf5;
+        }
+        
+        .welcome {
+            background-color: #12ffa0;
+        }
+
+        .denied {
+            background-color: #ff0000;
+            color: whitesmoke;
+        }
+
+        .center-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            padding: 50px 0;
+        }
+
+        .custom-background h1 {
+            font-size: 3em; /* Tamaño de fuente grande */
+            line-height: 1.2; /* Altura de línea para mejorar la legibilidad */
+            font-weight: 700; /* Usamos un peso más grueso para la fuente */
+        }
+    </style>
+</head>
+<body class="home">
+    <section class="center-container">
+        <div class="custom-background">
+            <h1 class="title is-size-1 is-family-monospace has-text-weight-bold">Ingrese Contraseña</h1>
+        </div>
+    </section>
+    <script>
+        function checkStatus() {
+            fetch('/check_status')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.estado === "access") {
+                        document.body.className = "welcome";
+                        document.querySelector('.custom-background h1').textContent = "Bienvenido";
+                    } else if (data.estado === "denied") {
+                        document.body.className = "denied";
+                        document.querySelector('.custom-background h1').textContent = "Acceso Denegado";
+                    } else {
+                        document.body.className = "home";
+                        document.querySelector('.custom-background h1').textContent = "Ingrese Contraseña";
+                    }
+                })
+                .catch(error => console.error('Error fetching status:', error));
+        }
+
+        setInterval(checkStatus, 5000); // Actualiza cada 5 segundos
+    </script>
+</body>
+</html>
